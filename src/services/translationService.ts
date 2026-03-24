@@ -722,12 +722,19 @@ export class TranslationService {
       }
 
       if (existing.docs.length > 0) {
-        await payload.update({
-          id: existing.docs[0].id,
-          collection: exclusionsSlug,
-          data: exclusionsData,
-        })
-      } else {
+        if (excludedPaths.length === 0) {
+          await payload.delete({
+            id: existing.docs[0].id,
+            collection: exclusionsSlug,
+          })
+        } else {
+          await payload.update({
+            id: existing.docs[0].id,
+            collection: exclusionsSlug,
+            data: exclusionsData,
+          })
+        }
+      } else if (excludedPaths.length > 0) {
         await payload.create({
           collection: exclusionsSlug,
           data: exclusionsData,

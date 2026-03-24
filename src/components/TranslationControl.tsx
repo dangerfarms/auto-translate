@@ -230,6 +230,30 @@ export const TranslationControl: React.FC<TranslationControlProps> = ({
         currentExcludedPaths = currentExcludedPaths.filter((path) => path !== fieldPath)
       }
 
+      // No exclusions left for this locale, so remove the record entirely.
+      if (currentExcludedPaths.length === 0) {
+        if (existingId) {
+          const deleteResponse = await fetch(`/api/translation-exclusions/${existingId}`, {
+            method: 'DELETE',
+          })
+
+          if (deleteResponse.ok) {
+            console.log('[TranslationControl] Deleted exclusions record:', existingId)
+            setIsExcluded(false)
+          } else {
+            console.error(
+              '[TranslationControl] Failed to delete exclusions:',
+              await deleteResponse.text(),
+            )
+          }
+        } else {
+          console.log('[TranslationControl] No exclusions remain and no record exists to delete')
+          setIsExcluded(false)
+        }
+
+        return
+      }
+
       // Create the exclusion data - ALWAYS include the current locale
       const exclusionsData = {
         collectionSlug: effectiveCollectionSlug,

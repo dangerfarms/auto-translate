@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.5] - 2026-03-20
+
+### 🐛 Bug Fixes
+
+- **Fixed translation exclusion state in `TranslationControl`**
+  - Updated exclusion lookups and save payloads to use `collectionSlug` instead of the legacy `collection` field
+  - Normalized `documentId` values to strings so exclusion state loads correctly for numeric document IDs
+  - Replaced JSON-stringified REST `where` queries with properly serialized nested query params using `qs-esm`
+  - Prevents unrelated exclusion records from being returned for other collections or documents
+  - Only updates the lock state after a successful API response and logs failed create/update responses for easier debugging
+  - Fixed React hook ordering by moving conditional render guards below hooks and adding early exits inside the effect/callback logic
+
 ## [1.3.4] - 2025-11-20
 
 - Chore: cleanup and update configurations
